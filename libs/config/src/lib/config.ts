@@ -1,3 +1,2 @@
-export function config(): string {
-  return 'config';
-}
+export * from './environments'
+export * from './config.interface'
