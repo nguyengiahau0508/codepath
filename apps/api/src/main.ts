@@ -8,6 +8,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 
 import { config } from '@codepath/config'
+import { DataSource } from 'typeorm';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -18,6 +19,18 @@ async function bootstrap() {
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
   );
+
+  const dataSource = app.get(DataSource);
+  try {
+    if (!dataSource.isInitialized) {
+      await dataSource.initialize();
+    }
+    Logger.log(
+      `✅ Database connected successfully at ${config.database.host}:${config.database.port} (DB: ${config.database.name})`
+    );
+  } catch (error) {
+    Logger.error('❌ Database connection failed', error);
+  }
 }
 
 bootstrap();
