@@ -1,26 +1,26 @@
 {
-  "name": "admin",
+  "name": "student",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "prefix": "app",
-  "sourceRoot": "apps/admin/src",
+  "sourceRoot": "apps/student/src",
   "tags": [],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/admin",
-        "browser": "apps/admin/src/main.ts",
+        "outputPath": "dist/apps/student",
+        "browser": "apps/student/src/main.ts",
         "polyfills": ["zone.js"],
-        "tsConfig": "apps/admin/tsconfig.app.json",
+        "tsConfig": "apps/student/tsconfig.app.json",
         "assets": [
           {
             "glob": "**/*",
-            "input": "apps/admin/public"
+            "input": "apps/student/public"
           }
         ],
-        "styles": ["apps/admin/src/styles.css"]
+        "styles": ["apps/student/src/styles.css"]
       },
       "configurations": {
         "production": {
@@ -50,26 +50,22 @@
       "continuous": true,
       "executor": "@angular/build:dev-server",
         "options": {
-    "port": 4200
+    "port": 4300
   },
       "configurations": {
         "production": {
-          "buildTarget": "admin:build:production"
+          "buildTarget": "student:build:production"
         },
         "development": {
-          "buildTarget": "admin:build:development"
+          "buildTarget": "student:build:development"
         }
       },
-      "defaultConfiguration": "development",
-      "dependsOn": ["api:serve"],
-      "options": {
-        "proxyConfig": "apps/admin/proxy.conf.json"
-      }
+      "defaultConfiguration": "development"
     },
     "extract-i18n": {
       "executor": "@angular/build:extract-i18n",
       "options": {
-        "buildTarget": "admin:build"
+        "buildTarget": "student:build"
       }
     },
     "lint": {
@@ -79,16 +75,16 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/admin/jest.config.ts"
+        "jestConfig": "apps/student/jest.config.ts"
       }
     },
     "serve-static": {
       "continuous": true,
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "admin:build",
+        "buildTarget": "student:build",
         "port": 4200,
-        "staticFilePath": "dist/apps/admin/browser",
+        "staticFilePath": "dist/apps/student/browser",
         "spa": true
       }
     }
