@@ -7,15 +7,15 @@ export interface AppConfig {
   };
 
   admin: {
-    adminUrl: string;
+    url: string;
   };
 
   student: {
-    studentUrl: string;
+    url: string;
   };
 
   teacher: {
-    teacherUrl: string;
+    url: string;
   };
 
   database: {
@@ -26,10 +26,29 @@ export interface AppConfig {
     name: string;
   };
 
-  auth: {
-    jwtSecret: string;
-    expiresIn: string;
+  redis: {
+    host: string;
+    port: number,
+    password: string,
+    db: number
   };
+
+  jwt: {
+    access: {
+      secret: string,
+      expiresIn: string
+    },
+    refresh: {
+      secret: string,
+      expiresIn: string
+    },
+    tokenEncKey: string
+  };
+
+  googleAuth: {
+    clientId: string;
+    clientSecret: string;
+  }
 
   ai: {
     enabled: boolean;
