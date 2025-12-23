@@ -7,6 +7,7 @@ import {
   OneToMany,
   JoinColumn,
   CreateDateColumn,
+  Index,
 } from 'typeorm';
 import { ContestType } from '../enums/contest-type.enum';
 import { BaseEntity } from 'src/common/base/base.entity';
@@ -16,6 +17,9 @@ import { ContestParticipant } from './contest_participants.entity';
 import { ContestSubmission } from './contest_submissions.entity';
 
 @Entity('contests')
+@Index('idx_contests_code', ['code'])
+@Index('idx_contests_start_end', ['startAt', 'endAt'])
+@Index('idx_contests_type', ['type'])
 export class Contest extends BaseEntity {
   @Column({ length: 100, unique: true })
   code: string;

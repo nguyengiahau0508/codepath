@@ -6,11 +6,15 @@ import {
   ManyToOne,
   JoinColumn,
   PrimaryColumn,
+  Index,
+  CreateDateColumn,
 } from 'typeorm';
 import { Contest } from './contests.entity';
 import { ProblemVersion } from 'src/modules/problem-authoring/entities/problem_versions.entity';
 
 @Entity('contest_problems')
+@Index('idx_contest_problems_contest', ['contestId'])
+@Index('idx_contest_problems_problem', ['problemVersionId'])
 export class ContestProblem {
   @PrimaryColumn({ name: 'contest_id', type: 'bigint' })
   contestId: number;
@@ -39,4 +43,9 @@ export class ContestProblem {
 
   @Column({ name: 'penalty_per_wrong', nullable: true })
   penaltyPerWrong?: number;
+
+  /* ===== Timestamps ===== */
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 }

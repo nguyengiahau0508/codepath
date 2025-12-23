@@ -7,6 +7,7 @@ import {
   JoinColumn,
   Column,
   CreateDateColumn,
+  Index,
 } from 'typeorm';
 import { Contest } from './contests.entity';
 import { User } from 'src/modules/identity/entities/users.entity';
@@ -14,6 +15,9 @@ import { Submission } from 'src/modules/judge/entities/submissions.entity';
 import { ProblemVersion } from 'src/modules/problem-authoring/entities/problem_versions.entity';
 
 @Entity('contest_submissions')
+@Index('idx_contest_submissions_contest', ['contest'])
+@Index('idx_contest_submissions_user', ['user'])
+@Index('idx_contest_submissions_submission', ['submission'])
 export class ContestSubmission extends BaseEntity {
   @ManyToOne(() => Contest, { nullable: false })
   @JoinColumn({ name: 'contest_id' })

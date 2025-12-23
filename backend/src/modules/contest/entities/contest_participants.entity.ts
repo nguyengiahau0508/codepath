@@ -7,11 +7,14 @@ import {
   PrimaryColumn,
   CreateDateColumn,
   Column,
+  Index,
 } from 'typeorm';
 import { Contest } from './contests.entity';
 import { User } from 'src/modules/identity/entities/users.entity';
 
 @Entity('contest_participants')
+@Index('idx_contest_participants_contest', ['contestId'])
+@Index('idx_contest_participants_user', ['userId'])
 export class ContestParticipant {
   @PrimaryColumn({ name: 'contest_id', type: 'bigint' })
   contestId: number;
