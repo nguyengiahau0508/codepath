@@ -1,11 +1,13 @@
 
 // programming-languages/entities/programming-language.entity.ts
 import { BaseEntity } from 'src/common/base/base.entity';
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, Index } from 'typeorm';
 import { CodeDraft } from './code_drafts.entity';
 import { CodeRun } from './code_runs.entity';
 
 @Entity('programming_languages')
+@Index('idx_programming_languages_code', ['code'])
+@Index('idx_programming_languages_enabled', ['isEnabled'])
 export class ProgrammingLanguage extends BaseEntity {
   @Column({ length: 20, unique: true })
   code: string; // cpp, python, java, ...

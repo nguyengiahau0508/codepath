@@ -6,6 +6,7 @@ import {
   ManyToOne,
   JoinColumn,
   CreateDateColumn,
+  Index,
 } from 'typeorm';
 import { CodeRunStatus } from '../enums/code-run-status.enum';
 import { BaseEntity } from 'src/common/base/base.entity';
@@ -14,6 +15,9 @@ import { ProblemVersion } from 'src/modules/problem-authoring/entities/problem_v
 import { ProgrammingLanguage } from './programming_languages.entity';
 
 @Entity('code_runs')
+@Index('idx_code_runs_user', ['user'])
+@Index('idx_code_runs_status', ['status'])
+@Index('idx_code_runs_problem', ['problemVersion'])
 export class CodeRun extends BaseEntity {
   @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: 'user_id' })
