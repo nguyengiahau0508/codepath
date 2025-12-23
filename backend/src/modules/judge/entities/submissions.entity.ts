@@ -20,6 +20,8 @@ import { JudgeJob } from './judge_jobs.entity';
 @Entity('submissions')
 @Index('idx_submissions_user', ['user', 'createdAt'])
 @Index('idx_submissions_problem', ['problemVersion'])
+@Index('idx_submissions_status', ['status'])
+@Index('idx_submissions_language', ['language'])
 export class Submission extends BaseEntity {
   @ManyToOne(() => User, { nullable: false })
   @JoinColumn({ name: 'user_id' })

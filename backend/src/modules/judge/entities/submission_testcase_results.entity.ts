@@ -6,6 +6,7 @@ import {
   ManyToOne,
   Unique,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { SubmissionTestcaseStatus } from '../enums/submission-testcase-status.enum';
 import { BaseEntity } from 'src/common/base/base.entity';
@@ -14,6 +15,7 @@ import { TestCase } from 'src/modules/problem-authoring/entities/test_cases.enti
 
 @Entity('submission_testcase_results')
 @Unique(['submission', 'testCase'])
+@Index('idx_submission_testcase_status', ['status'])
 export class SubmissionTestcaseResult extends BaseEntity {
   @ManyToOne(() => Submission, (s) => s.testcaseResults, {
     onDelete: 'CASCADE',

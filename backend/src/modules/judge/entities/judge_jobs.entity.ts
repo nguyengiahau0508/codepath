@@ -5,12 +5,16 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { JudgeJobStatus } from '../enums/judge-job-status.enum';
 import { BaseEntity } from 'src/common/base/base.entity';
 import { Submission } from './submissions.entity';
 
 @Entity('judge_jobs')
+@Index('idx_judge_jobs_submission', ['submission'])
+@Index('idx_judge_jobs_status', ['queueStatus'])
+@Index('idx_judge_jobs_worker', ['workerId'])
 export class JudgeJob extends BaseEntity {
   @ManyToOne(() => Submission, (s) => s.judgeJobs, {
     onDelete: 'CASCADE',
