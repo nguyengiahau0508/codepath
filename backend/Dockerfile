@@ -16,6 +16,5 @@ COPY . .
 # Expose port 3000 for the NestJS application
 EXPOSE 3000
 
-# Start the NestJS development server with hot reload
-# NestJS watch mode natively supports polling for Docker environments
-CMD ["npm", "run", "start:dev", "--", "--watch"]
+# Start with database migrations, then start the NestJS development server
+CMD ["sh", "-c", "npm run db:migrate && npm run start:dev"]
