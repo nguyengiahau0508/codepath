@@ -8,9 +8,14 @@ import {
   ManyToOne,
   JoinColumn,
   CreateDateColumn,
+  Index,
 } from 'typeorm';
 
 @Entity('audit_logs')
+@Index('idx_audit_logs_actor', ['actorUser'])
+@Index('idx_audit_logs_action', ['action'])
+@Index('idx_audit_logs_target', ['targetType', 'targetId'])
+@Index('idx_audit_logs_created_at', ['createdAt'])
 export class AuditLog extends BaseEntity {
   @ManyToOne(() => User, { nullable: true })
   @JoinColumn({ name: 'actor_user_id' })

@@ -7,9 +7,11 @@ import {
   ManyToOne,
   JoinColumn,
   PrimaryColumn,
+  Index,
 } from 'typeorm';
 
 @Entity('problem_analytics_daily')
+@Index('idx_problem_analytics_date', ['date'])
 export class ProblemAnalyticsDaily {
   @PrimaryColumn({ name: 'problem_id', type: 'bigint' })
   problemId: number;
