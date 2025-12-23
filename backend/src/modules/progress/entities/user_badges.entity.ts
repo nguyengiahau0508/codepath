@@ -7,10 +7,13 @@ import {
   JoinColumn,
   PrimaryColumn,
   CreateDateColumn,
+  Index,
 } from 'typeorm';
 import { Badge } from './badges.entity';
 
 @Entity('user_badges')
+@Index('idx_user_badges_user', ['userId'])
+@Index('idx_user_badges_badge', ['badgeId'])
 export class UserBadge {
   @PrimaryColumn({ name: 'user_id', type: 'bigint' })
   userId: number;

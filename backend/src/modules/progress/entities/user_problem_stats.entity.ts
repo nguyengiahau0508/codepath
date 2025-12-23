@@ -6,12 +6,16 @@ import {
   ManyToOne,
   JoinColumn,
   PrimaryColumn,
+  Index,
 } from 'typeorm';
 import { UserProblemStatus } from '../enums/user-problem-status.enum';
 import { User } from 'src/modules/identity/entities/users.entity';
 import { Problem } from 'src/modules/problem-authoring/entities/problems.entity';
 
 @Entity('user_problem_stats')
+@Index('idx_user_problem_stats_user', ['userId'])
+@Index('idx_user_problem_stats_status', ['bestStatus'])
+@Index('idx_user_problem_stats_last_attempt', ['lastAttemptAt'])
 export class UserProblemStat {
   @PrimaryColumn({ name: 'user_id', type: 'bigint' })
   userId: number;
