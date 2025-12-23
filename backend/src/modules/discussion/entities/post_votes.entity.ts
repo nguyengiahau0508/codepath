@@ -7,11 +7,14 @@ import {
   JoinColumn,
   PrimaryColumn,
   CreateDateColumn,
+  Index,
 } from 'typeorm';
 import { DiscussionPost } from './discussion_posts.entity';
 import { User } from 'src/modules/identity/entities/users.entity';
 
 @Entity('post_votes')
+@Index('idx_post_votes_post', ['postId'])
+@Index('idx_post_votes_user', ['userId'])
 export class PostVote {
   @PrimaryColumn({ name: 'post_id', type: 'bigint' })
   postId: number;

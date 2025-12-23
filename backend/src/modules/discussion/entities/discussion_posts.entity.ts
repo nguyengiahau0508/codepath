@@ -17,6 +17,10 @@ import { User } from 'src/modules/identity/entities/users.entity';
 
 @Entity('discussion_posts')
 @Index('idx_thread_time', ['thread', 'createdAt'])
+@Index('idx_discussion_posts_author', ['author'])
+@Index('idx_discussion_posts_parent', ['parentPost'])
+@Index('idx_discussion_posts_type', ['postType'])
+@Index('idx_discussion_posts_best', ['isBestSolution'])
 export class DiscussionPost extends BaseEntity {
   @ManyToOne(() => DiscussionThread, (t) => t.posts, {
     onDelete: 'CASCADE',

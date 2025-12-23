@@ -10,10 +10,14 @@ import {
   OneToMany,
   JoinColumn,
   CreateDateColumn,
+  Index,
 } from 'typeorm';
 import { DiscussionPost } from './discussion_posts.entity';
 
 @Entity('discussion_threads')
+@Index('idx_discussion_threads_problem', ['problem'])
+@Index('idx_discussion_threads_created_by', ['createdBy'])
+@Index('idx_discussion_threads_created_at', ['createdAt'])
 export class DiscussionThread extends BaseEntity {
   @ManyToOne(() => Problem, { nullable: false })
   @JoinColumn({ name: 'problem_id' })
