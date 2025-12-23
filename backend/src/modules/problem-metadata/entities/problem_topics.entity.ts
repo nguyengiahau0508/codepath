@@ -6,10 +6,14 @@ import {
   ManyToOne,
   JoinColumn,
   PrimaryColumn,
+  Index,
+  CreateDateColumn,
 } from 'typeorm';
 import { Topic } from './topics.entity';
 
 @Entity('problem_topics')
+@Index('idx_problem_topics_problem', ['problemId'])
+@Index('idx_problem_topics_topic', ['topicId'])
 export class ProblemTopic {
   /* ===== Composite PK ===== */
 
@@ -28,4 +32,9 @@ export class ProblemTopic {
   @ManyToOne(() => Topic, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'topic_id' })
   topic: Topic;
+
+  /* ===== Timestamps ===== */
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 }

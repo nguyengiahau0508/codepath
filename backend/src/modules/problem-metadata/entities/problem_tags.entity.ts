@@ -5,11 +5,15 @@ import {
   ManyToOne,
   JoinColumn,
   PrimaryColumn,
+  Index,
+  CreateDateColumn,
 } from 'typeorm';
 import { Tag } from './tags.entity';
 import { Problem } from 'src/modules/problem-authoring/entities/problems.entity';
 
 @Entity('problem_tags')
+@Index('idx_problem_tags_problem', ['problemId'])
+@Index('idx_problem_tags_tag', ['tagId'])
 export class ProblemTag {
   @PrimaryColumn({ name: 'problem_id', type: 'bigint' })
   problemId: number;
@@ -24,4 +28,9 @@ export class ProblemTag {
   @ManyToOne(() => Tag, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'tag_id' })
   tag: Tag;
+
+  /* ===== Timestamps ===== */
+
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 }
