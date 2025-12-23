@@ -1,21 +1,21 @@
-# Sử dụng Node.js 20 làm base image
+# Use Node.js 20 as the base image
 FROM node:20
 
-# Thiết lập thư mục làm việc
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy package.json và package-lock.json
+# Copy package.json and package-lock.json to the workspace
 COPY package*.json ./
 
-# Cài đặt dependencies
+# Install project dependencies
 RUN npm install
 
-# Copy toàn bộ source code
+# Copy the rest of the application source code
 COPY . .
 
-# Expose port 3000 cho NestJS
+# Expose port 3000 for the NestJS application
 EXPOSE 3000
 
-# Chạy NestJS development server với hot reload
-# NestJS watch mode tự động hỗ trợ polling cho Docker
+# Start the NestJS development server with hot reload
+# NestJS watch mode natively supports polling for Docker environments
 CMD ["npm", "run", "start:dev", "--", "--watch"]
