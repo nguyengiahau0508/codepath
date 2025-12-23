@@ -89,7 +89,7 @@ DB_HOST=mariadb         # use 'mariadb' inside Docker; 'localhost' outside
 DB_PORT=3306
 DB_NAME=codepath_db
 DB_USER=codepath_user
-DB_PASSWORD=@Giahau2004
+DB_PASSWORD=
 
 # Redis
 REDIS_HOST=redis        # use 'redis' inside Docker; 'localhost' outside
