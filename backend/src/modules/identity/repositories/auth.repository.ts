@@ -1,5 +1,7 @@
+import { RegisterDto } from "../dto/auth/register.dto";
+import { User } from "../entities/users.entity";
 export interface AuthRepository {
-    // Repository methods would go here
-    // login(email: string, password: string): Promise<{ accessToken: string; refreshToken: string }>;
+    login(user: User): Promise<{user: User, accessToken: string; refreshToken: string }>;
     validateUser(email: string, password: string): Promise<any>
+    register(dto: RegisterDto): Promise<User>
 }   

@@ -11,6 +11,8 @@ import { AuthController } from "./controller/auth.controller";
 import { UsersService } from "./services/users.service";
 import { AuthService } from "./services/auth.service";
 import { LocalStrategy } from "./strategies/local.strategy";
+import { TokenService } from "./services/token.service";
+import { JwtModule } from "@nestjs/jwt";
 
 
 @Module({
@@ -24,11 +26,13 @@ import { LocalStrategy } from "./strategies/local.strategy";
       UserSession, 
       User
     ]),
+    JwtModule
   ],
   providers: [
     UsersService,
     AuthService,
-    LocalStrategy
+    LocalStrategy,
+    TokenService,
   ],  
   controllers: [
     AuthController
