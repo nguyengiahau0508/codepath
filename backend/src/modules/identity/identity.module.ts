@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { OAuthProvider } from "./entities/oauth_providers.entity";
 import { PasswordResetToken } from "./entities/password_reset_tokens.entity";
@@ -14,8 +14,10 @@ import { LocalStrategy } from "./strategies/local.strategy";
 import { TokenService } from "./services/token.service";
 import { JwtModule } from "@nestjs/jwt";
 import { SessionsService } from "./services/sessions.service";
+import { JwtStrategy } from "./strategies/jwt.strategy";
+import { UsersController } from "./controller/users.controller";
 
-
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forFeature([
@@ -30,14 +32,19 @@ import { SessionsService } from "./services/sessions.service";
     JwtModule
   ],
   providers: [
+    // Services
     UsersService,
     AuthService,
-    LocalStrategy,
     TokenService,
-    SessionsService
+    SessionsService,
+
+    // Strategies
+    LocalStrategy,
+    JwtStrategy
   ],  
   controllers: [
-    AuthController
+    AuthController,
+    UsersController
   ]
 })
 export class IdentityModule { }
