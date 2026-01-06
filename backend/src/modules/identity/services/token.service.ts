@@ -46,11 +46,11 @@ export class TokenService {
         });
     }
 
-    async decodeAccessToken(token: string): Promise<any> {
+    async decodeAccessToken(token: string): Promise<JwtPayload> {
         return this.jwtService.decode(token);
     }
 
-    async decodeRefreshToken(token: string): Promise<any> {
+    async decodeRefreshToken(token: string): Promise<JwtPayload> {
         return this.jwtService.decode(token);
     }
 }

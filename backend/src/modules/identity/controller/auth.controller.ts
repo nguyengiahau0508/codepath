@@ -1,9 +1,8 @@
 import { Body, Controller, Post, Request, UseGuards } from "@nestjs/common";
-import { AuthGuard } from "@nestjs/passport";
 import { RegisterDto } from "../dto/auth/register.dto";
 import { AuthService } from "../services/auth.service";
 import { LocalAuthGuard } from "../guards/local-auth.guard";
-
+import * as authenticatedRequestInterface from "../interfaces/authenticated-request.interface";
 @Controller("identity/auth")
 export class AuthController {
     constructor(
@@ -12,8 +11,8 @@ export class AuthController {
 
     @Post("login")
     @UseGuards(LocalAuthGuard)
-    async login(@Request() req: any) {
-        return await this.authService.login(req.user)
+    async login(@Request() req: authenticatedRequestInterface.AuthenticatedRequest) {
+        return await this.authService.login(req)
     }
 
     @Post("register")
@@ -26,7 +25,7 @@ export class AuthController {
 
     @UseGuards(LocalAuthGuard)
     @Post('auth/logout')
-    async logout(@Request() req: any) {
-        return req.logout();
+    async logout(@Request() req: authenticatedRequestInterface.AuthenticatedRequest) {
+        return req.logOut;
     }
 }
