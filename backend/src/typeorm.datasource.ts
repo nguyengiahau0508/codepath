@@ -18,15 +18,8 @@ export const AppDataSource = new DataSource({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 
-  entities: [
-    'dist/**/*.entity.js',
-    'src/**/*.entity.ts',
-  ],
-  
-  migrations: [
-    'dist/migrations/*.js',
-    'src/migrations/*.ts',
-  ],
+  entities: ['src/**/*.entity.ts'],
+  migrations: ['src/migrations/*.ts'],
 
   migrationsTableName: 'typeorm_migrations',
   synchronize: false,

@@ -23,11 +23,11 @@ export class TokenService {
         });
     }
 
-    async generateRefreshToken(user: User): Promise<string> {
+    async generateRefreshToken(user: User, jti: string): Promise<string> {
         if (!user.email) {
             throw new InternalServerErrorException('User email is required for token generation');
         }
-        const payload: JwtPayload = { email: user.email, sub: user.id.toString(), type: 'refresh' };
+        const payload: JwtPayload = { email: user.email, sub: user.id.toString(), type: 'refresh', jti };
         return this.jwtService.signAsync(payload, {
             secret: this.configService.get('JWT_REFRESH_SECRET'),
             expiresIn: this.configService.get('JWT_REFRESH_EXPIRES'),

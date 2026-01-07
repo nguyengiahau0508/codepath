@@ -4,4 +4,5 @@ export interface JwtPayload {
     type: 'access' | 'refresh';
     exp?: number;
     iat?: number;
+    jti?: string;
 }

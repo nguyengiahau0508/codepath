@@ -12,6 +12,8 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
   app.setGlobalPrefix('api');
   app.use(cookieParser());
-  await app.listen(process.env.BACKEND_PORT ?? 3000);
+  await app.listen(Number(process.env.BACKEND_PORT ?? 3000), '0.0.0.0', 
+  ()=>console.log(`Server running on port ${process.env.BACKEND_PORT}`)
+);
 }
 bootstrap();

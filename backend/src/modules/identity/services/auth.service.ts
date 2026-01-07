@@ -7,6 +7,8 @@ import { TokenService } from "./token.service";
 import { SessionsService } from "./sessions.service";
 import { AuthenticatedRequest } from "../interfaces/authenticated-request.interface";
 import { AuthenticatedResponse } from "../interfaces/authenticated-response.interface";
+import { NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { JwtPayload } from "../interfaces/jwt-payload.interface";
 
 @Injectable()
 export class AuthService{
@@ -31,32 +33,31 @@ export class AuthService{
     }
 
     async login(req: AuthenticatedRequest, res: AuthenticatedResponse): Promise<{ user: User, accessToken: string}> {
-        // generate access token and refresh token
-        const accessToken = await this.tokenService.generateAccessToken(req.user);
-        const refreshToken= await this.tokenService.generateRefreshToken(req.user);
         // update last login at
         req.user.lastLoginAt = new Date();
         await this.usersService.update(req.user)
-        
+
         // create session
-        const salt = await bcrypt.genSalt();
-        const refreshTokenHash = await bcrypt.hash(refreshToken, salt);
-        const refreshTokenExpireAt = (await this.tokenService.decodeRefreshToken(refreshToken)).exp;
         const session = await this.sessionsService.create({
            user: req.user,
-           refreshTokenHash: refreshTokenHash,
            ip: req.ip,
            userAgent: req.get('user-agent'),
-           expiresAt: new Date(refreshTokenExpireAt! * 1000),
         })
         await this.sessionsService.save(session)
+        const refreshToken = await this.tokenService.generateRefreshToken(req.user, session.id.toString());
+        const accessToken = await this.tokenService.generateAccessToken(req.user);
+        
+        // hash refresh token and update session
+        session.refreshTokenHash = await bcrypt.hash(refreshToken, 10);
+        session.expiresAt = new Date((await this.tokenService.decodeRefreshToken(refreshToken)).exp! * 1000);
+        await this.sessionsService.update(session.id, session);
         // set cookie
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
             sameSite: 'strict',
-            maxAge: 60 * 60 * 24 * 7 * 1000
-        })
+            maxAge: 60 * 60 * 24 * 7 * 1000, // 7 days
+        });
         return { user: req.user, accessToken };
     }
 
@@ -71,5 +72,32 @@ export class AuthService{
         })
         await this.usersService.save(user)
         return user
+    }
+
+    async refreshToken(req: AuthenticatedRequest, res: AuthenticatedResponse): Promise<{ user: User, accessToken: string}> {
+        const currentRefreshToken = req.cookies.refreshToken;
+        const currentRefreshTokenPayload: JwtPayload = await this.tokenService.verifyRefreshToken(currentRefreshToken);
+        console.log(currentRefreshTokenPayload);
+        const session = await this.sessionsService.findOne(Number(currentRefreshTokenPayload.jti));
+        if (!session) { 
+            throw new NotFoundException('Session not found');
+        }
+        if(session.ip !== req.ip ||
+             session.userAgent !== req.get('user-agent') ||
+             (session.expiresAt && session.expiresAt < new Date())) {
+            session.revokedAt = new Date();
+            await this.sessionsService.update(session.id, session);
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+        const isMatch = await bcrypt.compare(currentRefreshToken, session.refreshTokenHash || '');
+        if (!isMatch) {
+            throw new UnauthorizedException('Invalid refresh token');
+        }
+        const currentUser = await this.usersService.findOne(Number(currentRefreshTokenPayload.sub));
+        if (!currentUser) {
+            throw new NotFoundException('User not found');
+        }
+        const accessToken = await this.tokenService.generateAccessToken(currentUser);
+        return {user: currentUser, accessToken}
     }
 }
