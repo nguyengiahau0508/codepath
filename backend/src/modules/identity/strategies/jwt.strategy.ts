@@ -21,13 +21,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    async validate(payload: JwtPayload): Promise<User> {
-        const user = await this.usersService.findOne(Number(payload.sub));
+    async validate(payload: JwtPayload) {
+        const user = await this.usersService.findOne(+payload.sub);
+        const roles = await this.usersService.findAllRolesByUser(+payload.sub);
         if (!user) {
-            throw new UnauthorizedException('User not found');
+            throw new UnauthorizedException();
         }
-        const roles = await this.usersService.findAllRolesByUser(Number(payload.sub));
-        console.log(roles);
-        return user;
+
+        return {
+            id: user.id,
+            email: user.email,
+            roles: roles.map(role => role.code),
+        };
     }
+
 }

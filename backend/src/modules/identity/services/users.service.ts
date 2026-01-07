@@ -44,8 +44,7 @@ export class UsersService {
         })
     }
 
-    async changePassword(user: User, oldPassword: string, newPassword: string): Promise<User> {
-        const userId = user.id;
+    async changePassword(userId: number, oldPassword: string, newPassword: string): Promise<User> {
         const currentUser = await this.userRepository.findOne({
             where: {
                 id: userId
@@ -80,7 +79,7 @@ export class UsersService {
         return currentUser;
     }
 
-    async findAllRolesByUser(userId: number): Promise<Array<string>> {
+    async findAllRolesByUser(userId: number): Promise<Role[]> {
         const user = await this.userRepository.findOne({
             where: {
                 id: userId
@@ -96,7 +95,7 @@ export class UsersService {
                 404
             )
         }
-        return user.roles.map(role => role.code)
+        return user.roles
     }
 
     async assignRoleToUser(dto: AssignRoleDto): Promise<User> {
