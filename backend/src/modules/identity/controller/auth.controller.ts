@@ -1,8 +1,9 @@
-import { Body, Controller, Post, Request, UseGuards } from "@nestjs/common";
+import { Body, Controller, Post, Request, UseGuards, Res } from "@nestjs/common";
 import { RegisterDto } from "../dto/auth/register.dto";
 import { AuthService } from "../services/auth.service";
 import { LocalAuthGuard } from "../guards/local-auth.guard";
 import * as authenticatedRequestInterface from "../interfaces/authenticated-request.interface";
+import * as AuthenticatedResponseInterface from "../interfaces/authenticated-response.interface";
 @Controller("identity/auth")
 export class AuthController {
     constructor(
@@ -11,8 +12,8 @@ export class AuthController {
 
     @Post("login")
     @UseGuards(LocalAuthGuard)
-    async login(@Request() req: authenticatedRequestInterface.AuthenticatedRequest) {
-        return await this.authService.login(req)
+    async login(@Request() req: authenticatedRequestInterface.AuthenticatedRequest, @Res({ passthrough: true }) res: AuthenticatedResponseInterface.AuthenticatedResponse) {
+        return await this.authService.login(req, res)
     }
 
     @Post("register")

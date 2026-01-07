@@ -6,6 +6,7 @@ import { User } from "../entities/users.entity";
 import { TokenService } from "./token.service";
 import { SessionsService } from "./sessions.service";
 import { AuthenticatedRequest } from "../interfaces/authenticated-request.interface";
+import { AuthenticatedResponse } from "../interfaces/authenticated-response.interface";
 
 @Injectable()
 export class AuthService{
@@ -29,7 +30,7 @@ export class AuthService{
         return null;
     }
 
-    async login(req: AuthenticatedRequest): Promise<{ user: User, accessToken: string, refreshToken: string }> {
+    async login(req: AuthenticatedRequest, res: AuthenticatedResponse): Promise<{ user: User, accessToken: string}> {
         // generate access token and refresh token
         const accessToken = await this.tokenService.generateAccessToken(req.user);
         const refreshToken= await this.tokenService.generateRefreshToken(req.user);
@@ -49,7 +50,13 @@ export class AuthService{
            expiresAt: new Date(refreshTokenExpireAt! * 1000),
         })
         await this.sessionsService.save(session)
-        return { user: req.user, accessToken, refreshToken };
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: 60 * 60 * 24 * 7 * 1000
+        })
+        return { user: req.user, accessToken };
     }
 
     async register(dto: RegisterDto): Promise<User> {
