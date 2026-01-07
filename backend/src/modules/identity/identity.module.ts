@@ -29,7 +29,7 @@ import { UsersController } from "./controller/users.controller";
       UserSession, 
       User
     ]),
-    JwtModule
+    JwtModule,
   ],
   providers: [
     // Services

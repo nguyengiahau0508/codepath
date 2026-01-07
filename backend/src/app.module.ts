@@ -6,6 +6,8 @@ import { envValidationSchema } from './config/env.validation';
 import { DatabaseModule } from './infrastructure/database/typeorm.module';
 import { QueueModule } from './infrastructure/queue/queue.module';
 import { AllModule } from './modules/all.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './modules/identity/guards/jwt-auth.guard';
 
 @Module({
   imports: [
@@ -19,6 +21,11 @@ import { AllModule } from './modules/all.module';
     AllModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    }
+  ],
 })
 export class AppModule { }
