@@ -77,7 +77,6 @@ export class AuthService{
     async refreshToken(req: AuthenticatedRequest, res: AuthenticatedResponse): Promise<{ user: User, accessToken: string}> {
         const currentRefreshToken = req.cookies.refreshToken;
         const currentRefreshTokenPayload: JwtPayload = await this.tokenService.verifyRefreshToken(currentRefreshToken);
-        console.log(currentRefreshTokenPayload);
         const session = await this.sessionsService.findOne(Number(currentRefreshTokenPayload.jti));
         if (!session) { 
             throw new NotFoundException('Session not found');

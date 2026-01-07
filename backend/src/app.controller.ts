@@ -10,7 +10,7 @@ export class AppController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  @Roles(RoleEnum.Teacher)
+  @Roles(RoleEnum.Admin)
   getHello(): string {
     return this.appService.getHello();
   }

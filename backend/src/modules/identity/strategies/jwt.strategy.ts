@@ -7,6 +7,8 @@ import { JwtPayload } from '../interfaces/jwt-payload.interface';
 import { UsersService } from '../services/users.service';
 import { UnauthorizedException } from '@nestjs/common';
 import { User } from '../entities/users.entity';
+import { ICurrentUser } from '../interfaces/current-user.interface';
+import { RoleEnum } from '../enums/role.enum';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -21,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    async validate(payload: JwtPayload) {
+    async validate(payload: JwtPayload): Promise<ICurrentUser> {
         const user = await this.usersService.findOne(+payload.sub);
         const roles = await this.usersService.findAllRolesByUser(+payload.sub);
         if (!user) {
@@ -30,8 +32,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
         return {
             id: user.id,
-            email: user.email,
-            roles: roles.map(role => role.code),
+            email: user.email!,
+            roles: roles.map(role => role.code) as RoleEnum[] || [],
         };
     }
 
