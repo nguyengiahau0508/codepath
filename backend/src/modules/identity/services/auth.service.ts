@@ -50,6 +50,7 @@ export class AuthService{
            expiresAt: new Date(refreshTokenExpireAt! * 1000),
         })
         await this.sessionsService.save(session)
+        // set cookie
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true,
