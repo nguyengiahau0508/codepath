@@ -16,6 +16,8 @@ import { JwtModule } from "@nestjs/jwt";
 import { SessionsService } from "./services/sessions.service";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 import { UsersController } from "./controller/users.controller";
+import { RolesService } from "./services/roles.service";
+import { RolesController } from "./controller/roles.controller";
 
 @Global()
 @Module({
@@ -37,6 +39,7 @@ import { UsersController } from "./controller/users.controller";
     AuthService,
     TokenService,
     SessionsService,
+    RolesService,
 
     // Strategies
     LocalStrategy,
@@ -44,7 +47,8 @@ import { UsersController } from "./controller/users.controller";
   ],  
   controllers: [
     AuthController,
-    UsersController
+    UsersController,
+    RolesController
   ]
 })
 export class IdentityModule { }

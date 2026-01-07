@@ -26,6 +26,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         if (!user) {
             throw new UnauthorizedException('User not found');
         }
+        const roles = await this.usersService.findAllRolesByUser(Number(payload.sub));
+        console.log(roles);
         return user;
     }
 }

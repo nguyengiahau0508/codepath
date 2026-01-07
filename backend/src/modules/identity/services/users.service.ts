@@ -4,11 +4,15 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { AppException } from "src/common/exceptions/app.exception";
 import * as bcrypt from "bcrypt";
-
+import { Role } from "../entities/roles.entity";
+import { RoleEnum } from "../enums/role.enum";
+import { RolesService } from "./roles.service";
+import { AssignRoleDto } from "../dto/users/assign-role.dto";
 @Injectable()
 export class UsersService {
     constructor(
-        @InjectRepository(User) private userRepository: Repository<User>
+        @InjectRepository(User) private userRepository: Repository<User>,
+        private readonly rolesService: RolesService
     ) { }
 
     async create(user: Partial<User>): Promise<User> {
@@ -54,7 +58,7 @@ export class UsersService {
                 404
             )
         }
-        if(!currentUser.passwordHash) {
+        if (!currentUser.passwordHash) {
             throw new AppException(
                 "CANNOT_USE_THIS_FEATURE",
                 "Cannot use this feature",
@@ -75,4 +79,57 @@ export class UsersService {
         await this.userRepository.update(userId, currentUser);
         return currentUser;
     }
+
+    async findAllRolesByUser(userId: number): Promise<Array<string>> {
+        const user = await this.userRepository.findOne({
+            where: {
+                id: userId
+            },
+            relations: {
+                roles: true
+            }
+        })
+        if (!user) {
+            throw new AppException(
+                "USER_NOT_FOUND",
+                "User not found",
+                404
+            )
+        }
+        return user.roles.map(role => role.code)
+    }
+
+    async assignRoleToUser(dto: AssignRoleDto): Promise<User> {
+        const user = await this.userRepository.findOne({
+            where: { id: dto.userId },
+            relations: { roles: true },
+        });
+
+        if (!user) {
+            throw new AppException(
+                'USER_NOT_FOUND',
+                'User not found',
+                404,
+            );
+        }
+
+        const role = await this.rolesService.findOneById(dto.roleId);
+
+        if (!role) {
+            throw new AppException(
+                'ROLE_NOT_FOUND',
+                'Role not found',
+                404,
+            );
+        }
+
+        const alreadyAssigned = user.roles.some(r => r.id === role.id);
+        if (!alreadyAssigned) {
+            user.roles.push(role);
+            await this.userRepository.save(user); 
+        }
+
+        return user;
+    }
+
 }
