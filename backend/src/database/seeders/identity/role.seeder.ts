@@ -12,6 +12,7 @@ export class RoleSeeder implements Seeder {
       RoleEnum.Admin,
       RoleEnum.Teacher,
       RoleEnum.Student,
+      RoleEnum.ProblemSetter,
     ];
 
     for (const code of roles) {
