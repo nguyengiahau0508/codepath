@@ -1,13 +1,12 @@
 import { AppDataSource } from '../datasource';
 import { Seeder } from './seeder';
-import { RoleSeeder } from './role.seeder';
+import { IdentitySeeders } from './identity/identity.seeder';
 
 async function bootstrap() {
   await AppDataSource.initialize();
 
-  const seeders: Seeder[] = [
-    new RoleSeeder(),
-  ];
+  const seeders: Seeder[] = [];
+  seeders.push(...IdentitySeeders);
 
   for (const seeder of seeders) {
     await seeder.run();

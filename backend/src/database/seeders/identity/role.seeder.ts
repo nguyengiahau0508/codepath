@@ -1,9 +1,8 @@
-import { Seeder } from './seeder';
-import { AppDataSource } from '../datasource';
+
+import { AppDataSource } from '../../datasource';
 import { RoleEnum } from 'src/modules/identity/enums/role.enum';
 import { Role } from 'src/modules/identity/entities/roles.entity';
-
-
+import { Seeder } from '../seeder';
 
 export class RoleSeeder implements Seeder {
   async run(): Promise<void> {
