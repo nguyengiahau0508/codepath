@@ -8,6 +8,7 @@ import { ProblemVersion } from "./entities/problem_versions.entity";
 import { Problem } from "./entities/problems.entity";
 import { TestCase } from "./entities/test_cases.entity";
 import { TestGroup } from "./entities/test_groups.entity";
+import { ProblemsService } from "./services/problems.service";
 
 @Module({
   imports: [
@@ -22,5 +23,10 @@ import { TestGroup } from "./entities/test_groups.entity";
       TestGroup
     ]),
   ],
+  providers: [
+    // Services go here
+    ProblemsService
+  ],
+  controllers: [],
 })
 export class ProblemAuthoringModule { }
