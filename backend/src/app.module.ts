@@ -8,6 +8,7 @@ import { QueueModule } from './infrastructure/queue/queue.module';
 import { AllModule } from './modules/all.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './modules/identity/guards/jwt-auth.guard';
+import { EventEmitterModule } from '@nestjs/event-emitter/dist/event-emitter.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { JwtAuthGuard } from './modules/identity/guards/jwt-auth.guard';
       validationSchema: envValidationSchema,
       envFilePath: ['.env'],
     }),
+    EventEmitterModule.forRoot(),
     DatabaseModule,
     QueueModule,
     AllModule
