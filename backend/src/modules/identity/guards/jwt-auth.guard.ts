@@ -10,7 +10,7 @@ import { ROLES_KEY } from '../decorators/roles.decorator';
 import { RoleEnum } from '../enums/role.enum';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {
+export class JwtAuthGuard extends AuthGuard(['jwt', 'local']) {
   constructor(private readonly reflector: Reflector) {
     super();
   }

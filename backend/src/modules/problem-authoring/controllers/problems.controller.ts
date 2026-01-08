@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { ProblemsService } from "../services/problems.service";
 import { Roles } from "src/modules/identity/decorators/roles.decorator";
 import { RoleEnum } from "src/modules/identity/enums/role.enum";
@@ -16,4 +16,12 @@ export class ProblemsController {
     async createProblem(@CurrentUser() user: currentUserInterface.ICurrentUser, @Body() createProblemDto: CreateProblemDto) {
         return this.problemsService.createProblem(user.id, createProblemDto);
     }
+
+    @Get(':id')
+    async getProblemById(@Param('id') id: number) {
+        return this.problemsService.findOne({
+            id
+        })
+    }
+    
 }

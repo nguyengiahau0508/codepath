@@ -42,7 +42,7 @@ export class TokenService {
 
     async verifyRefreshToken(token: string): Promise<any> {
         return this.jwtService.verifyAsync(token, {
-            secret:     this.configService.get('JWT_REFRESH_SECRET'),
+            secret: this.configService.get('JWT_REFRESH_SECRET'),
         });
     }
 
