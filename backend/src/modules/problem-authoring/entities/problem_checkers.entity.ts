@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { ProblemVersion } from './problem_versions.entity';
 import { CheckerType } from '../enums/checker-type.enum';
-import { Language } from 'src/modules/reference/entities/languages.entity';
+import { ProgrammingLanguage } from 'src/modules/code-execution/entities/programming_languages.entity';
 
 @Entity('problem_checkers')
 export class ProblemChecker extends BaseEntity {
@@ -25,7 +25,7 @@ export class ProblemChecker extends BaseEntity {
   @Column({ type: 'longtext', nullable: true })
   sourceCode?: string;
 
-  @ManyToOne(() => Language, { nullable: true })
-  @JoinColumn({ name: 'language_id' })
-  language?: Language;
+  @ManyToOne(() => ProgrammingLanguage, { nullable: true })
+  @JoinColumn({ name: 'programming_language_id' })
+  programmingLanguage?: ProgrammingLanguage;
 }

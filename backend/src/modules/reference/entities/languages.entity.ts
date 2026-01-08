@@ -16,7 +16,4 @@ export class Language extends BaseEntity {
 
   @OneToMany(() => ProblemStatement, (s) => s.language)
   statements: ProblemStatement[];
-
-  @OneToMany(() => ProblemChecker, (c) => c.language)
-  checkers: ProblemChecker[];
 }
